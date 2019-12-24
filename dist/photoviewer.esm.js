@@ -5,11 +5,11 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|                                                            
  *
- * photoviewer - v3.4.0
- * A JS plugin to view images just like in Windows
- * https://nzbin.github.io/photoviewer/
+ * imagepdfviewer - v0.1.2
+ * A JS plugin to view images/pdf just like in Windows
+ * https://github.com/757566833/photoviewer
  *
- * Copyright (c) 2018 nzbin
+ * Copyright (c) 2018 fork from nzbin
  * Released under MIT License
  */
 
@@ -1819,10 +1819,10 @@ var resizable = {
  * PhotoViewer class
  */
 
-var PhotoViewer =
+var Imagepdfviewer =
 /*#__PURE__*/
 function () {
-  function PhotoViewer(items, options, el) {
+  function Imagepdfviewer(items, options, el) {
     this.options = $$1.extend(true, {}, DEFAULTS, options);
 
     if (options && $$1.isArray(options.footToolbar)) {
@@ -1859,7 +1859,7 @@ function () {
     this.init(items, this.options);
   }
 
-  var _proto = PhotoViewer.prototype;
+  var _proto = Imagepdfviewer.prototype;
 
   _proto.init = function init(items, opts) {
     this.groupData = items;
@@ -1868,7 +1868,7 @@ function () {
     PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex']; // Get image src
 
     var imgSrc = items[this.groupIndex]['src'];
-    this.open();
+    this.open(imgSrc);
     this.loadImg(imgSrc); // Draggable & Movable & Resizable
 
     if (opts.draggable) {
@@ -1915,9 +1915,35 @@ function () {
     return photoviewerHTML;
   };
 
-  _proto.build = function build() {
+  _proto.pdfRender = function pdfRender() {
+    var btnsTpl = {
+      minimize: "<button class=\"" + NS + "-button " + NS + "-button-minimize\" title=\"" + this.options.i18n.minimize + "\">\n                    " + this.options.icons.minimize + "\n                  </button>",
+      maximize: "<button class=\"" + NS + "-button " + NS + "-button-maximize\" title=\"" + this.options.i18n.maximize + "\">\n                    " + this.options.icons.maximize + "\n                  </button>",
+      close: "<button class=\"" + NS + "-button " + NS + "-button-close\" title=\"" + this.options.i18n.close + "\">\n                " + this.options.icons.close + "\n              </button>",
+      zoomIn: "<button class=\"" + NS + "-button " + NS + "-button-zoom-in\" title=\"" + this.options.i18n.zoomIn + "\">\n                  " + this.options.icons.zoomIn + "\n                </button>",
+      zoomOut: "<button class=\"" + NS + "-button " + NS + "-button-zoom-out\" title=\"" + this.options.i18n.zoomOut + "\">\n                  " + this.options.icons.zoomOut + "\n                </button>",
+      prev: "<button class=\"" + NS + "-button " + NS + "-button-prev\" title=\"" + this.options.i18n.prev + "\">\n                " + this.options.icons.prev + "\n              </button>",
+      next: "<button class=\"" + NS + "-button " + NS + "-button-next\" title=\"" + this.options.i18n.next + "\">\n                " + this.options.icons.next + "\n              </button>",
+      fullscreen: "<button class=\"" + NS + "-button " + NS + "-button-fullscreen\" title=\"" + this.options.i18n.fullscreen + "\">\n                    " + this.options.icons.fullscreen + "\n                  </button>",
+      actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
+      rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
+      rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
+    }; // PhotoViewer base HTML
+
+    var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <iframe class=\"" + NS + "-image " + NS + "-iframe\" src=\"\" alt=\"\" />\n          </div>\n          \n        </div>\n      </div>";
+    return photoviewerHTML;
+  };
+
+  _proto.build = function build(imgsrc) {
     // Create PhotoViewer HTML string
-    var photoviewerHTML = this.render(); // Make PhotoViewer HTML string to jQuery element
+    var photoviewerHTML;
+
+    if (imgsrc.toLowerCase().includes('.pdf')) {
+      photoviewerHTML = this.pdfRender();
+    } else {
+      photoviewerHTML = this.render();
+    } // Make PhotoViewer HTML string to jQuery element
+
 
     var $photoviewer = $$1(photoviewerHTML); // Get all PhotoViewer element
 
@@ -1953,7 +1979,7 @@ function () {
     }
   };
 
-  _proto.open = function open() {
+  _proto.open = function open(imgsrc) {
     if (!this.options.multiInstances) {
       $$1(CLASS_NS + '-modal').eq(0).remove();
     } // Fixed modal position bug
@@ -1975,7 +2001,7 @@ function () {
       }
     }
 
-    this.build();
+    this.build(imgsrc);
 
     this._triggerHook('beforeOpen', this.$el); // Add PhotoViewer to DOM
 
@@ -2578,18 +2604,18 @@ function () {
     }
   };
 
-  return PhotoViewer;
+  return Imagepdfviewer;
 }();
 /**
  * Add methods to PhotoViewer
  */
 
 
-$$1.extend(PhotoViewer.prototype, draggable, movable, resizable);
+$$1.extend(Imagepdfviewer.prototype, draggable, movable, resizable);
 /**
  * Add PhotoViewer to globle
  */
 
-window.PhotoViewer = PhotoViewer;
+window.PhotoViewer = Imagepdfviewer;
 
-export default PhotoViewer;
+export default Imagepdfviewer;

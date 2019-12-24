@@ -1,7 +1,7 @@
 {
-  "name": "photoviewer",
-  "version": "3.4.0",
-  "description": "A JS plugin to view images just like in Windows",
+  "name": "imagepdfviewer",
+  "version": "0.1.4",
+  "description": "A JS plugin to view images/pdf just like in Windows",
   "main": "dist/photoviewer.common.js",
   "module": "dist/photoviewer.esm.js",
   "browser": "dist/photoviewer.js",
@@ -12,8 +12,8 @@
     "src",
     "types"
   ],
-  "homepage": "https://nzbin.github.io/photoviewer/",
-  "author": "nzbin",
+  "homepage": "https://github.com/757566833/photoviewer",
+  "author": "fork from nzbin",
   "license": "MIT",
   "directories": {
     "doc": "docs",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nzbin/photoviewer.git"
+    "url": "git+https://github.com/757566833/photoviewer.git"
   },
   "keywords": [
     "photoviewer",

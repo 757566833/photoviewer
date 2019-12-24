@@ -30,7 +30,7 @@ import resizable from './resizable';
 /**
  * PhotoViewer class
  */
-class PhotoViewer {
+class Imagepdfviewer {
   constructor(items, options, el) {
     this.options = $.extend(true, {}, DEFAULTS, options);
 
@@ -83,7 +83,7 @@ class PhotoViewer {
     // Get image src
     const imgSrc = items[this.groupIndex]['src'];
 
-    this.open();
+    this.open(imgSrc);
 
     this.loadImg(imgSrc);
 
@@ -179,9 +179,70 @@ class PhotoViewer {
     return photoviewerHTML;
   }
 
-  build() {
+  pdfRender() {
+    const btnsTpl = {
+      minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
+                    ${this.options.icons.minimize}
+                  </button>`,
+      maximize: `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
+                    ${this.options.icons.maximize}
+                  </button>`,
+      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
+                ${this.options.icons.close}
+              </button>`,
+      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
+                  ${this.options.icons.zoomIn}
+                </button>`,
+      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
+                  ${this.options.icons.zoomOut}
+                </button>`,
+      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
+                ${this.options.icons.prev}
+              </button>`,
+      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
+                ${this.options.icons.next}
+              </button>`,
+      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
+                    ${this.options.icons.fullscreen}
+                  </button>`,
+      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
+                      ${this.options.icons.actualSize}
+                    </button>`,
+      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
+                      ${this.options.icons.rotateLeft}
+                    </button>`,
+      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
+                      ${this.options.icons.rotateRight}
+                    </button>`
+    };
+
+    // PhotoViewer base HTML
+    const photoviewerHTML = `<div class="${NS}-modal">
+        <div class="${NS}-inner">
+          <div class="${NS}-header">
+            <div class="${NS}-toolbar ${NS}-toolbar-head">
+              ${this._createBtns(this.options.headToolbar, btnsTpl)}
+            </div>
+            ${this._createTitle()}
+          </div>
+          <div class="${NS}-stage">
+            <iframe class="${NS}-image ${NS}-iframe" src="" alt="" />
+          </div>
+          
+        </div>
+      </div>`;
+
+    return photoviewerHTML;
+  }
+
+  build(imgsrc) {
     // Create PhotoViewer HTML string
-    const photoviewerHTML = this.render();
+    let photoviewerHTML;
+    if(imgsrc.toLowerCase().includes('.pdf')){
+       photoviewerHTML = this.pdfRender();
+    }else{
+       photoviewerHTML = this.render();
+    }
 
     // Make PhotoViewer HTML string to jQuery element
     const $photoviewer = $(photoviewerHTML);
@@ -225,7 +286,7 @@ class PhotoViewer {
     }
   }
 
-  open() {
+  open(imgsrc) {
     if (!this.options.multiInstances) {
       $(CLASS_NS + '-modal').eq(0).remove();
     }
@@ -242,7 +303,7 @@ class PhotoViewer {
       }
     }
 
-    this.build();
+    this.build(imgsrc);
 
     this._triggerHook('beforeOpen', this.$el);
 
@@ -927,11 +988,11 @@ class PhotoViewer {
 /**
  * Add methods to PhotoViewer
  */
-$.extend(PhotoViewer.prototype, draggable, movable, resizable);
+$.extend(Imagepdfviewer.prototype, draggable, movable, resizable);
 
 /**
  * Add PhotoViewer to globle
  */
-window.PhotoViewer = PhotoViewer;
+window.PhotoViewer = Imagepdfviewer;
 
-export default PhotoViewer;
+export default Imagepdfviewer;
