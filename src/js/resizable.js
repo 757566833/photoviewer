@@ -9,7 +9,9 @@ import {
   PUBLIC_VARS
 } from './constants';
 
-import { setGrabCursor } from './utilities';
+import {
+  setGrabCursor
+} from './utilities';
 
 const ELEMS_WITH_RESIZE_CURSOR = `html, body, .${NS}-modal, .${NS}-stage, .${NS}-button`;
 
@@ -107,12 +109,12 @@ export default {
     // Modal CSS options
     const getModalOpts = function (dir, offsetX, offsetY) {
       // Modal should not move when its width to the minwidth
-      const modalLeft = -offsetX + modalData.w > minWidth
-        ? offsetX + modalData.l
-        : modalData.l + modalData.w - minWidth;
-      const modalTop = -offsetY + modalData.h > minHeight
-        ? offsetY + modalData.t
-        : modalData.t + modalData.h - minHeight;
+      const modalLeft = -offsetX + modalData.w > minWidth ?
+        offsetX + modalData.l :
+        modalData.l + modalData.w - minWidth;
+      const modalTop = -offsetY + modalData.h > minHeight ?
+        offsetY + modalData.t :
+        modalData.t + modalData.h - minHeight;
 
       const opts = {
         e: {
@@ -276,8 +278,19 @@ export default {
     };
 
     const dragStart = (dir, e) => {
+     
       e = e || window.event;
 
+      let type = '';
+      
+      try {
+        type = e.target.parentElement.getElementsByClassName('imagepdfviewer-image')[0].tagName.toLowerCase();
+      } catch (error) {
+        //
+      }
+      if(type){
+        window.ImagePdfViewerCacheEvent = type;
+      }
       e.preventDefault();
 
       isDragging = true;
@@ -328,7 +341,7 @@ export default {
       e = e || window.event;
 
       e.preventDefault();
-
+      
       if (isDragging && !this.isMaximized) {
         const endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX;
         const endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
@@ -339,9 +352,11 @@ export default {
 
         $(modal).css(modalOpts);
 
-        const imageOpts = getImageOpts(direction, relativeX, relativeY);
-
-        $(image).css(imageOpts);
+        if(window.ImagePdfViewerCacheEvent!='iframe'){
+          const imageOpts = getImageOpts(direction, relativeX, relativeY);
+          $(image).css(imageOpts);
+        }
+        
 
         this.isDoResize = true;
       }
@@ -352,15 +367,13 @@ export default {
         TOUCH_END_EVENT + EVENT_NS,
         dragEnd
       );
-
+      window.ImagePdfViewerCacheEvent = '';
       // Set grab cursor
       if (PUBLIC_VARS['isResizing']) {
-        setGrabCursor(
-          {
+        setGrabCursor({
             w: imgWidth,
             h: imgHeight
-          },
-          {
+          }, {
             w: $(stage).width(),
             h: $(stage).height()
           },

@@ -37,7 +37,16 @@ export default {
 
     const dragStart = e => {
       e = e || window.event;
-
+      let type = '';
+      
+      try {
+        type = e.target.parentElement.getElementsByClassName('imagepdfviewer-image')[0].tagName.toLowerCase();
+      } catch (error) {
+        //
+      }
+      if(type){
+        window.ImagePdfViewerCacheEvent = type;
+      }
       e.preventDefault();
 
       const imageWidth = $(image).width();
@@ -79,7 +88,7 @@ export default {
       e = e || window.event;
 
       e.preventDefault();
-
+      
       if (isDragging) {
         const endX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.clientX;
         const endY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.clientY;
@@ -109,20 +118,26 @@ export default {
           newLeft = left;
         }
 
-        $(image).css({
-          left: newLeft + 'px',
-          top: newTop + 'px'
-        });
+        if (window.ImagePdfViewerCacheEvent != 'iframe') {
+          $(image).css({
+            left: newLeft + 'px',
+            top: newTop + 'px'
+          });
+          // Update image initial data
+          $.extend(this.imageData, {
+            left: newLeft,
+            top: newTop
+          });
+        }
 
-        // Update image initial data
-        $.extend(this.imageData, {
-          left: newLeft,
-          top: newTop
-        });
+
+
+
       }
     };
 
     const dragEnd = () => {
+      window.ImagePdfViewerCacheEvent = '';
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(
         TOUCH_END_EVENT + EVENT_NS,
         dragEnd

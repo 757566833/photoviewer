@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|                                                            
  *
- * imagepdfviewer - v0.1.6
+ * imagepdfviewer - v0.1.7
  * A JS plugin to view images/pdf just like in Windows
  * https://github.com/757566833/photoviewer
  *
@@ -1498,6 +1498,17 @@ var movable = {
 
     var dragStart = function dragStart(e) {
       e = e || window.event;
+      var type = '';
+
+      try {
+        type = e.target.parentElement.getElementsByClassName('imagepdfviewer-image')[0].tagName.toLowerCase();
+      } catch (error) {//
+      }
+
+      if (type) {
+        window.ImagePdfViewerCacheEvent = type;
+      }
+
       e.preventDefault();
       var imageWidth = $$1(image).width();
       var imageHeight = $$1(image).height();
@@ -1558,19 +1569,22 @@ var movable = {
           newLeft = left;
         }
 
-        $$1(image).css({
-          left: newLeft + 'px',
-          top: newTop + 'px'
-        }); // Update image initial data
+        if (window.ImagePdfViewerCacheEvent != 'iframe') {
+          $$1(image).css({
+            left: newLeft + 'px',
+            top: newTop + 'px'
+          }); // Update image initial data
 
-        $$1.extend(_this.imageData, {
-          left: newLeft,
-          top: newTop
-        });
+          $$1.extend(_this.imageData, {
+            left: newLeft,
+            top: newTop
+          });
+        }
       }
     };
 
     var dragEnd = function dragEnd() {
+      window.ImagePdfViewerCacheEvent = '';
       $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
       isDragging = false;
       PUBLIC_VARS['isMoving'] = false; // Remove grabbing cursor
@@ -1738,6 +1752,17 @@ var resizable = {
 
     var dragStart = function dragStart(dir, e) {
       e = e || window.event;
+      var type = '';
+
+      try {
+        type = e.target.parentElement.getElementsByClassName('imagepdfviewer-image')[0].tagName.toLowerCase();
+      } catch (error) {//
+      }
+
+      if (type) {
+        window.ImagePdfViewerCacheEvent = type;
+      }
+
       e.preventDefault();
       isDragging = true;
       PUBLIC_VARS['isResizing'] = true;
@@ -1783,14 +1808,19 @@ var resizable = {
         var relativeY = endY - startY;
         var modalOpts = getModalOpts(direction, relativeX, relativeY);
         $$1(modal).css(modalOpts);
-        var imageOpts = getImageOpts(direction, relativeX, relativeY);
-        $$1(image).css(imageOpts);
+
+        if (window.ImagePdfViewerCacheEvent != 'iframe') {
+          var imageOpts = getImageOpts(direction, relativeX, relativeY);
+          $$1(image).css(imageOpts);
+        }
+
         _this.isDoResize = true;
       }
     };
 
     var dragEnd = function dragEnd() {
-      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd); // Set grab cursor
+      $D.off(TOUCH_MOVE_EVENT + EVENT_NS, dragMove).off(TOUCH_END_EVENT + EVENT_NS, dragEnd);
+      window.ImagePdfViewerCacheEvent = ''; // Set grab cursor
 
       if (PUBLIC_VARS['isResizing']) {
         setGrabCursor({
@@ -1825,6 +1855,7 @@ var resizable = {
   }
 };
 
+/* eslint-disable no-console */
 /**
  * ImagepdfViewer class
  */
@@ -2177,7 +2208,8 @@ function () {
       width: img.width * scale,
       height: img.height * scale,
       left: (stageData.w - img.width * scale) / 2,
-      top: (stageData.h - img.height * scale) / 2
+      top: (stageData.h - img.height * scale) / 2,
+      src: img.src
     }); // Set grab cursor
 
     setGrabCursor({
@@ -2230,7 +2262,8 @@ function () {
 
         _this2.imageData = {
           originalWidth: img.width,
-          originalHeight: img.height
+          originalHeight: img.height,
+          src: img.src
         };
 
         if (_this2.isMaximized || _this2.isOpened && _this2.options.fixedModalPos) {
@@ -2259,7 +2292,8 @@ function () {
 
         _this2.imageData = {
           originalWidth: img.width,
-          originalHeight: img.height
+          originalHeight: img.height,
+          src: img.src
         };
 
         if (_this2.isMaximized || _this2.isOpened && _this2.options.fixedModalPos) {
@@ -2291,21 +2325,21 @@ function () {
     //       originalWidth: img.width,
     //       originalHeight: img.height
     //     };
-    //     if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
+    //     if  (this.isMaximized || (this.isOpened && this.options.fixedModalPos))  { 
     //       this.setImageSize(img);
     //     } else {
     //       this.setModalSize(img);
     //     }
     //     // Callback of image loaded successfully
-    //     if (fn) {
+    //     if  (fn)  { 
     //       fn.call();
     //     }
     //   },
-    //   () => {
+    //    () =>  { 
     //     // Loader end
     //     this.$imagepdfviewer.find(CLASS_NS + '-loader').remove();
     //     // Callback of image loading failed
-    //     if (err) {
+    //     if  (err)  { 
     //       err.call();
     //     }
     //   }
@@ -2375,7 +2409,7 @@ function () {
     ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // Image ratio
 
     ratio = this.$image.width() / this.imageData.originalWidth * ratio; // Fixed digital error
-    // if (ratio > 0.95 && ratio < 1.05) {
+    // if  (ratio > 0.95 && ratio < 1.05)  { 
     //   ratio = 1;
     // }
 
@@ -2476,7 +2510,8 @@ function () {
     });
     this.setImageSize({
       width: this.imageData.originalWidth,
-      height: this.imageData.originalHeight
+      height: this.imageData.originalHeight,
+      src: this.imageData.src
     }); // Remove grab cursor when rotate
 
     this.$stage.removeClass('is-grab');
@@ -2490,12 +2525,14 @@ function () {
         if (_this4.isMaximized) {
           _this4.setImageSize({
             width: _this4.imageData.originalWidth,
-            height: _this4.imageData.originalHeight
+            height: _this4.imageData.originalHeight,
+            src: _this4.imageData.src
           });
         } else {
           _this4.setModalSize({
             width: _this4.imageData.originalWidth,
-            height: _this4.imageData.originalHeight
+            height: _this4.imageData.originalHeight,
+            src: _this4.imageData.src
           });
         }
       }
@@ -2535,7 +2572,8 @@ function () {
 
     this.setImageSize({
       width: this.imageData.originalWidth,
-      height: this.imageData.originalHeight
+      height: this.imageData.originalHeight,
+      src: this.imageData.src
     });
   };
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import $ from './domq.js';
 import DEFAULTS from './defaults';
 import {
@@ -32,14 +33,14 @@ import resizable from './resizable';
  * ImagepdfViewer class
  */
 class Imagepdfviewer {
-  constructor(items, options, el) {
-    this.options = $.extend(true, {}, DEFAULTS, options);
+ constructor (items, options, el)  { 
+   this.options = $.extend (true,  { }, DEFAULTS, options);
 
-    if (options && $.isArray(options.footToolbar)) {
+   if  (options && $.isArray(options.footToolbar))  { 
       this.options.footToolbar = options.footToolbar;
     }
 
-    if (options && $.isArray(options.headToolbar)) {
+   if  (options && $.isArray(options.headToolbar))  { 
       this.options.headToolbar = options.headToolbar;
     }
 
@@ -74,7 +75,7 @@ class Imagepdfviewer {
     this.init(items, this.options);
   }
 
-  init(items, opts) {
+ init (items, opts)  { 
     this.groupData = items;
     this.groupIndex = opts['index'];
 
@@ -89,13 +90,13 @@ class Imagepdfviewer {
     this.loadImg(imgSrc);
     
     // Draggable & Movable & Resizable
-    if (opts.draggable) {
+   if  (opts.draggable)  { 
       this.draggable(this.$imagepdfviewer, this.dragHandle, CLASS_NS + '-button');
     }
-    if (opts.movable) {
+   if  (opts.movable)  { 
       this.movable(this.$stage, this.$image);
     }
-    if (opts.resizable) {
+   if  (opts.resizable)  { 
       this.resizable(
         this.$imagepdfviewer,
         this.$stage,
@@ -107,21 +108,21 @@ class Imagepdfviewer {
     
   }
 
-  _createBtns(toolbar, btns) {
+ _createBtns (toolbar, btns)  { 
     let btnsStr = '';
 
-    $.each(toolbar, function (index, item) {
+   $.each (toolbar, function (index, item)  { 
       btnsStr += btns[item];
     });
 
     return btnsStr;
   }
 
-  _createTitle() {
+ _createTitle ()  { 
     return this.options.title ? `<div class="${NS}-title"></div>` : '';
   }
 
-  render() {
+ render ()  { 
     const btnsTpl = {
       minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
                     ${this.options.icons.minimize}
@@ -181,7 +182,7 @@ class Imagepdfviewer {
     return imagepdfviewerHTML;
   }
 
-  pdfRender() {
+ pdfRender ()  { 
     const btnsTpl = {
       minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
                     ${this.options.icons.minimize}
@@ -237,10 +238,10 @@ class Imagepdfviewer {
     return imagepdfviewerHTML;
   }
 
-  build(imgsrc) {
+ build (imgsrc)  { 
     // Create ImagepdfViewer HTML string
     let imagepdfviewerHTML;
-    if (imgsrc.toLowerCase().includes('.pdf')) {
+   if  (imgsrc.toLowerCase().includes('.pdf'))  { 
       imagepdfviewerHTML = this.pdfRender();
     } else {
       imagepdfviewerHTML = this.render();
@@ -288,21 +289,21 @@ class Imagepdfviewer {
     }
   }
 
-  open(imgsrc) {
-    if (!this.options.multiInstances) {
+ open (imgsrc)  { 
+   if  (!this.options.multiInstances)  { 
       $(CLASS_NS + '-modal').eq(0).remove();
     }
 
     // Fixed modal position bug
-    if (!$(CLASS_NS + '-modal').length && this.options.fixedContent) {
-      $('html').css({
+   if  (!$(CLASS_NS + '-modal').length && this.options.fixedContent)  { 
+     $ ('html').css( { 
         overflow: 'hidden'
       });
 
-      if (hasScrollbar()) {
+     if  (hasScrollbar())  { 
         let scrollbarWidth = getScrollbarWidth();
-        if (scrollbarWidth) {
-          $('html').css({
+       if  (scrollbarWidth)  { 
+         $ ('html').css( { 
             'padding-right': scrollbarWidth
           });
         }
@@ -323,7 +324,7 @@ class Imagepdfviewer {
     this._triggerHook('opened', this.$el);
   }
 
-  close() {
+ close ()  { 
     this._triggerHook('beforeClose', this.$el);
 
     // Remove instance
@@ -337,20 +338,20 @@ class Imagepdfviewer {
     const zeroModal = !$(CLASS_NS + '-modal').length;
 
     // Fixed modal position bug
-    if (zeroModal && this.options.fixedContent) {
-      $('html').css({
+   if  (zeroModal && this.options.fixedContent)  { 
+     $ ('html').css( { 
         overflow: '',
         'padding-right': ''
       });
     }
 
     // Reset zIndex after close
-    if (zeroModal && this.options.multiInstances) {
+   if  (zeroModal && this.options.multiInstances)  { 
       PUBLIC_VARS['zIndex'] = this.options.zIndex;
     }
 
     // Off events
-    if (!$(CLASS_NS + '-modal').length) {
+   if  (!$(CLASS_NS + '-modal').length)  { 
       $D.off(KEYDOWN_EVENT + EVENT_NS);
       $W.off(RESIZE_EVENT + EVENT_NS);
     }
@@ -358,7 +359,7 @@ class Imagepdfviewer {
     this._triggerHook('closed', this.$el);
   }
 
-  setModalPos(modal) {
+ setModalPos (modal)  { 
     const winWidth = $W.width();
     const winHeight = $W.height();
     const scrollLeft = $D.scrollLeft();
@@ -368,7 +369,7 @@ class Imagepdfviewer {
     const modalHeight = this.options.modalHeight;
     
     // Set modal maximized when init
-    if (this.options.initMaximized) {
+   if  (this.options.initMaximized)  { 
       modal.addClass(NS + '-maximize');
    
       modal.css({
@@ -391,7 +392,7 @@ class Imagepdfviewer {
     }
   }
 
-  setModalSize(img) {
+ setModalSize (img)  { 
     const winWidth = $W.width();
     const winHeight = $W.height();
     const scrollLeft = $D.scrollLeft();
@@ -445,8 +446,8 @@ class Imagepdfviewer {
     };
 
     // Add modal init animation
-    if (this.options.initAnimation) {
-      this.$imagepdfviewer.animate(modalCSSObj, 400, 'ease-in-out', () => {
+   if  (this.options.initAnimation)  { 
+     this.$imagepdfviewer.animate (modalCSSObj, 400, 'ease-in-out', () =>  { 
         this.setImageSize(img);
       });
     } else {
@@ -457,10 +458,10 @@ class Imagepdfviewer {
     this.isOpened = true;
   }
 
-  getImageScaleToStage(stageWidth, stageHeight) {
+ getImageScaleToStage (stageWidth, stageHeight)  { 
     let scale = 1;
 
-    if (!this.isRotated) {
+   if  (!this.isRotated)  { 
       scale = Math.min(stageWidth / this.img.width, stageHeight / this.img.height, 1);
     } else {
       scale = Math.min(stageWidth / this.img.height, stageHeight / this.img.width, 1);
@@ -469,7 +470,7 @@ class Imagepdfviewer {
     return scale;
   }
 
-  setImageSize(img) {
+ setImageSize (img)  { 
     const stageData = {
       w: this.$stage.width(),
       h: this.$stage.height()
@@ -477,7 +478,7 @@ class Imagepdfviewer {
 
     const scale = this.getImageScaleToStage(stageData.w, stageData.h);
     
-    if(img.src.toLowerCase().includes('pdf')){
+   if (img.src.toLowerCase().includes('pdf')) { 
       this.$image.css({
         width: '100%',
         height: '100%',
@@ -495,7 +496,7 @@ class Imagepdfviewer {
    
 
     // Store image initial data
-    $.extend(this.imageData, {
+   $.extend (this.imageData,  {
       initWidth: img.width * scale,
       initHeight: img.height * scale,
       initLeft: (stageData.w - img.width * scale) / 2,
@@ -503,7 +504,8 @@ class Imagepdfviewer {
       width: img.width * scale,
       height: img.height * scale,
       left: (stageData.w - img.width * scale) / 2,
-      top: (stageData.h - img.height * scale) / 2
+      top: (stageData.h - img.height * scale) / 2,
+      src:img.src
     });
 
     // Set grab cursor
@@ -519,7 +521,7 @@ class Imagepdfviewer {
     );
 
     // Just execute before image loaded
-    if (!this.imgLoaded) {
+   if  (!this.imgLoaded)  { 
       // Loader end
       this.$imagepdfviewer.find(CLASS_NS + '-loader').remove();
 
@@ -528,7 +530,7 @@ class Imagepdfviewer {
       this.$image.removeClass('image-ready');
 
       // Add image init animation
-      if (this.options.initAnimation && !this.options.progressiveLoading) {
+     if  (this.options.initAnimation && !this.options.progressiveLoading)  { 
         this.$image.fadeIn();
       }
 
@@ -536,7 +538,7 @@ class Imagepdfviewer {
     }
   }
 
-  loadImg(imgSrc, fn, err) {
+ loadImg (imgSrc, fn, err)  { 
     // Reset image
     this.$image.removeAttr('style').attr('src', '');
     this.isRotated = false;
@@ -551,13 +553,13 @@ class Imagepdfviewer {
     this.$stage.addClass('stage-ready');
     this.$image.addClass('image-ready');
 
-    if (this.options.initAnimation && !this.options.progressiveLoading) {
+   if  (this.options.initAnimation && !this.options.progressiveLoading)  { 
       this.$image.hide();
     }
 
     this.$image.attr('src', imgSrc);
  
-    if (imgSrc.toLowerCase().includes('.pdf')) {
+   if  (imgSrc.toLowerCase().includes('.pdf'))  { 
       preloadIframe(
         imgSrc,
         img => {
@@ -567,26 +569,27 @@ class Imagepdfviewer {
           // Store original data
           this.imageData = {
             originalWidth: img.width,
-            originalHeight: img.height
+            originalHeight: img.height,
+            src:img.src
           };
   
-          if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
+         if  (this.isMaximized || (this.isOpened && this.options.fixedModalPos))  { 
             this.setImageSize(img);
           } else {
             this.setModalSize(img);
           }
   
           // Callback of image loaded successfully
-          if (fn) {
+         if  (fn)  { 
             fn.call();
           }
         },
-        () => {
+        () =>  { 
           // Loader end
           this.$imagepdfviewer.find(CLASS_NS + '-loader').remove();
   
           // Callback of image loading failed
-          if (err) {
+         if  (err)  { 
             err.call();
           }
         }
@@ -601,26 +604,27 @@ class Imagepdfviewer {
           // Store original data
           this.imageData = {
             originalWidth: img.width,
-            originalHeight: img.height
+            originalHeight: img.height,
+            src:img.src
           };
   
-          if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
+         if  (this.isMaximized || (this.isOpened && this.options.fixedModalPos))  { 
             this.setImageSize(img);
           } else {
             this.setModalSize(img);
           }
   
           // Callback of image loaded successfully
-          if (fn) {
+         if  (fn)  { 
             fn.call();
           }
         },
-        () => {
+        () =>  { 
           // Loader end
           this.$imagepdfviewer.find(CLASS_NS + '-loader').remove();
   
           // Callback of image loading failed
-          if (err) {
+         if  (err)  { 
             err.call();
           }
         }
@@ -638,40 +642,40 @@ class Imagepdfviewer {
     //       originalHeight: img.height
     //     };
 
-    //     if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
+   //     if  (this.isMaximized || (this.isOpened && this.options.fixedModalPos))  { 
     //       this.setImageSize(img);
     //     } else {
     //       this.setModalSize(img);
     //     }
 
     //     // Callback of image loaded successfully
-    //     if (fn) {
+   //     if  (fn)  { 
     //       fn.call();
     //     }
     //   },
-    //   () => {
+   //    () =>  { 
     //     // Loader end
     //     this.$imagepdfviewer.find(CLASS_NS + '-loader').remove();
 
     //     // Callback of image loading failed
-    //     if (err) {
+   //     if  (err)  { 
     //       err.call();
     //     }
     //   }
     // );
 
-    if (this.options.title) {
+   if  (this.options.title)  { 
       this.setImgTitle(imgSrc);
     }
   }
 
-  setImgTitle(url) {
+ setImgTitle (url)  { 
     const title = this.groupData[this.groupIndex].title || getImageNameFromUrl(url);
 
     this.$title.html(title);
   }
 
-  jump(step) {
+ jump (step)  { 
     this._triggerHook('beforeChange', this.groupIndex);
 
     this.groupIndex = this.groupIndex + step;
@@ -679,12 +683,12 @@ class Imagepdfviewer {
     this.jumpTo(this.groupIndex);
   }
 
-  jumpTo(index) {
+ jumpTo (index)  { 
     index = index % this.groupData.length;
 
-    if (index >= 0) {
+   if  (index >= 0)  { 
       index = index % this.groupData.length;
-    } else if (index < 0) {
+   } else if  (index < 0)  { 
       index = (this.groupData.length + index) % this.groupData.length;
     }
 
@@ -692,25 +696,25 @@ class Imagepdfviewer {
 
     this.loadImg(
       this.groupData[index].src,
-      () => {
+      () =>  { 
         this._triggerHook('changed', index);
       },
-      () => {
+      () =>  { 
         this._triggerHook('changed', index);
       }
     );
   }
 
-  wheel(e) {
+ wheel (e)  { 
     e.preventDefault();
 
     let delta = 1;
 
-    if (e.deltaY) {
+   if  (e.deltaY)  { 
       delta = e.deltaY > 0 ? 1 : -1;
-    } else if (e.wheelDelta) {
+   } else if  (e.wheelDelta)  { 
       delta = -e.wheelDelta / 120;
-    } else if (e.detail) {
+   } else if  (e.detail)  { 
       delta = e.detail > 0 ? 1 : -1;
     }
 
@@ -726,7 +730,7 @@ class Imagepdfviewer {
     this.zoom(ratio, pointer, e);
   }
 
-  zoom(ratio, origin, e) {
+ zoom (ratio, origin, e)  { 
     // Zoom out ratio & Zoom in ratio
     ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 
@@ -734,18 +738,18 @@ class Imagepdfviewer {
     ratio = (this.$image.width() / this.imageData.originalWidth) * ratio;
 
     // Fixed digital error
-    // if (ratio > 0.95 && ratio < 1.05) {
+   // if  (ratio > 0.95 && ratio < 1.05)  { 
     //   ratio = 1;
     // }
 
-    if (ratio > this.options.maxRatio || ratio < this.options.minRatio) {
+   if  (ratio > this.options.maxRatio || ratio < this.options.minRatio)  { 
       return;
     }
 
     this.zoomTo(ratio, origin, e);
   }
 
-  zoomTo(ratio, origin, e) {
+ zoomTo (ratio, origin, e)  { 
     const $image = this.$image;
     const $stage = this.$stage;
     const imgData = {
@@ -781,13 +785,13 @@ class Imagepdfviewer {
     // Zoom out & Zoom in condition
     // It's important and it takes me a lot of time to get it
     // The conditions with image rotate 90 degree drive me crazy alomst!
-    if (imgNewHeight <= stageData.h) {
+   if  (imgNewHeight <= stageData.h)  { 
       newTop = (stageData.h - newHeight) / 2;
     } else {
       newTop = newTop > δ ? δ : newTop > offsetY - δ ? newTop : offsetY - δ;
     }
 
-    if (imgNewWidth <= stageData.w) {
+   if  (imgNewWidth <= stageData.w)  { 
       newLeft = (stageData.w - newWidth) / 2;
     } else {
       newLeft = newLeft > -δ ? -δ : newLeft > offsetX + δ ? newLeft : offsetX + δ;
@@ -800,6 +804,7 @@ class Imagepdfviewer {
     ) {
       this.setImageSize(this.img);
     } else {
+    
       $image.css({
         width: Math.round(newWidth) + 'px',
         height: Math.round(newHeight) + 'px',
@@ -820,7 +825,7 @@ class Imagepdfviewer {
     }
 
     // Update image initial data
-    $.extend(this.imageData, {
+   $.extend (this.imageData,  { 
       width: newWidth,
       height: newHeight,
       left: newLeft,
@@ -828,10 +833,10 @@ class Imagepdfviewer {
     });
   }
 
-  rotate(angle) {
+ rotate (angle)  { 
     this.rotateAngle = this.rotateAngle + angle;
 
-    if ((this.rotateAngle / 90) % 2 === 0) {
+   if  ((this.rotateAngle / 90) % 2 === 0)  { 
       this.isRotated = false;
     } else {
       this.isRotated = true;
@@ -840,33 +845,36 @@ class Imagepdfviewer {
     this.rotateTo(this.rotateAngle);
   }
 
-  rotateTo(angle) {
+ rotateTo (angle)  { 
     this.$image.css({
       transform: 'rotate(' + angle + 'deg)'
     });
 
     this.setImageSize({
       width: this.imageData.originalWidth,
-      height: this.imageData.originalHeight
+      height: this.imageData.originalHeight,
+      src:this.imageData.src
     });
 
     // Remove grab cursor when rotate
     this.$stage.removeClass('is-grab');
   }
 
-  resize() {
-    const resizeHandler = throttle(() => {
+ resize ()  { 
+   const resizeHandler = throttle (() =>  { 
       
-      if (this.isOpened) {
-        if (this.isMaximized) {
+     if  (this.isOpened)  { 
+       if  (this.isMaximized)  { 
           this.setImageSize({
             width: this.imageData.originalWidth,
-            height: this.imageData.originalHeight
+            height: this.imageData.originalHeight,
+            src:this.imageData.src
           });
         } else {
           this.setModalSize({
             width: this.imageData.originalWidth,
-            height: this.imageData.originalHeight
+            height: this.imageData.originalHeight,
+            src:this.imageData.src
           });
         }
       }
@@ -875,9 +883,9 @@ class Imagepdfviewer {
     return resizeHandler;
   }
 
-  maximize() {
+ maximize ()  { 
     
-    if (!this.isMaximized) {
+   if  (!this.isMaximized)  { 
       // Store modal data before maximize
       this.modalData = {
         width: this.$imagepdfviewer.width(),
@@ -914,16 +922,17 @@ class Imagepdfviewer {
 
     this.setImageSize({
       width: this.imageData.originalWidth,
-      height: this.imageData.originalHeight
+      height: this.imageData.originalHeight,
+      src:this.imageData.src
     });
   }
 
-  fullscreen() {
+ fullscreen ()  { 
     requestFullscreen(this.$imagepdfviewer[0]);
   }
 
-  keydown(e) {
-    if (!this.options.keyboard) {
+ keydown (e)  { 
+   if  (!this.options.keyboard)  { 
       return false;
     }
 
@@ -931,7 +940,7 @@ class Imagepdfviewer {
     const ctrlKey = e.ctrlKey || e.metaKey;
     const altKey = e.altKey || e.metaKey;
 
-    switch (keyCode) {
+   switch  (keyCode)  { 
       // ←
       case 37:
         this.jump(-1);
@@ -982,7 +991,7 @@ class Imagepdfviewer {
         break;
         // Ctrl + Alt + 0
       case 48:
-        if (ctrlKey && altKey) {
+       if  (ctrlKey && altKey)  { 
           this.zoomTo(
             1, {
               x: this.$stage.width() / 2,
@@ -994,13 +1003,13 @@ class Imagepdfviewer {
         break;
         // Ctrl + ,
       case 188:
-        if (ctrlKey) {
+       if  (ctrlKey)  { 
           this.rotate(-90);
         }
         break;
         // Ctrl + .
       case 190:
-        if (ctrlKey) {
+       if  (ctrlKey)  { 
           this.rotate(90);
         }
         break;
@@ -1012,16 +1021,16 @@ class Imagepdfviewer {
     }
   }
 
-  addEvents() {
-    this.$close.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+ addEvents ()  { 
+   this.$close.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e =>  { 
       this.close();
     });
 
-    this.$stage.off(WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, e => {
+   this.$stage.off (WHEEL_EVENT + EVENT_NS).on(WHEEL_EVENT + EVENT_NS, e =>  { 
       this.wheel(e);
     });
 
-    this.$zoomIn.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+   this.$zoomIn.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e =>  { 
       this.zoom(
         this.options.ratioThreshold * 3, {
           x: this.$stage.width() / 2,
@@ -1031,7 +1040,7 @@ class Imagepdfviewer {
       );
     });
 
-    this.$zoomOut.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+   this.$zoomOut.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e =>  { 
       this.zoom(
         -this.options.ratioThreshold * 3, {
           x: this.$stage.width() / 2,
@@ -1041,7 +1050,7 @@ class Imagepdfviewer {
       );
     });
 
-    this.$actualSize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e => {
+   this.$actualSize.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, e =>  { 
       this.zoomTo(
         1, {
           x: this.$stage.width() / 2,
@@ -1051,39 +1060,39 @@ class Imagepdfviewer {
       );
     });
 
-    this.$prev.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+   this.$prev.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () =>  { 
       this.jump(-1);
     });
 
-    this.$fullscreen.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+   this.$fullscreen.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () =>  { 
       this.fullscreen();
     });
 
-    this.$next.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+   this.$next.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () =>  { 
       this.jump(1);
     });
 
-    this.$rotateLeft.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+   this.$rotateLeft.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () =>  { 
       this.rotate(-90);
     });
 
-    this.$rotateRight.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+   this.$rotateRight.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () =>  { 
       this.rotate(90);
     });
 
-    this.$maximize.off(CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () => {
+   this.$maximize.off (CLICK_EVENT + EVENT_NS).on(CLICK_EVENT + EVENT_NS, () =>  { 
       this.maximize();
     });
 
-    $D.off(KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e => {
+   $D.off (KEYDOWN_EVENT + EVENT_NS).on(KEYDOWN_EVENT + EVENT_NS, e =>  { 
       this.keydown(e);
     });
 
     $W.on(RESIZE_EVENT + EVENT_NS, this.resize());
   }
 
-  _triggerHook(e, data) {
-    if (this.options.callbacks[e]) {
+ _triggerHook (e, data)  { 
+   if  (this.options.callbacks[e])  { 
       this.options.callbacks[e].apply(this, $.isArray(data) ? data : [data]);
     }
   }
