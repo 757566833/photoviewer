@@ -13,7 +13,7 @@ export const TOUCH_START_EVENT = supportTouch() ? 'touchstart' : 'mousedown';
 export const TOUCH_MOVE_EVENT = supportTouch() ? 'touchmove' : 'mousemove';
 export const TOUCH_END_EVENT = supportTouch() ? 'touchend' : 'mouseup';
 
-export const NS = 'photoviewer';
+export const NS = 'imagepdfviewer';
 export const CLASS_NS = '.' + NS;
 export const EVENT_NS = '.' + NS;
 

@@ -2,12 +2,12 @@
 // Resizable
 //
 
-.photoviewer-resizable-handle {
+.imagepdfviewer-resizable-handle {
   position: absolute;
   z-index: 10;
 }
 
-.photoviewer-resizable-handle-e {
+.imagepdfviewer-resizable-handle-e {
   top: 0;
   right: -5px;
   bottom: 0;
@@ -16,7 +16,7 @@
   cursor: e-resize;
 }
 
-.photoviewer-resizable-handle-s {
+.imagepdfviewer-resizable-handle-s {
   top: auto;
   right: 0;
   bottom: -5px;
@@ -25,7 +25,7 @@
   cursor: s-resize;
 }
 
-.photoviewer-resizable-handle-w {
+.imagepdfviewer-resizable-handle-w {
   top: 0;
   right: auto;
   bottom: 0;
@@ -34,7 +34,7 @@
   cursor: w-resize;
 }
 
-.photoviewer-resizable-handle-n {
+.imagepdfviewer-resizable-handle-n {
   top: -5px;
   right: 0;
   bottom: auto;
@@ -43,7 +43,7 @@
   cursor: n-resize;
 }
 
-.photoviewer-resizable-handle-se {
+.imagepdfviewer-resizable-handle-se {
   top: auto;
   right: -5px;
   bottom: -5px;
@@ -53,7 +53,7 @@
   cursor: se-resize;
 }
 
-.photoviewer-resizable-handle-sw {
+.imagepdfviewer-resizable-handle-sw {
   top: auto;
   right: auto;
   bottom: -5px;
@@ -63,7 +63,7 @@
   cursor: sw-resize;
 }
 
-.photoviewer-resizable-handle-nw {
+.imagepdfviewer-resizable-handle-nw {
   top: -5px;
   right: auto;
   bottom: auto;
@@ -73,7 +73,7 @@
   cursor: nw-resize;
 }
 
-.photoviewer-resizable-handle-ne {
+.imagepdfviewer-resizable-handle-ne {
   top: -5px;
   right: -5px;
   bottom: auto;

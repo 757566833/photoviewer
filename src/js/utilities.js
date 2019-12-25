@@ -28,6 +28,7 @@ export function throttle(fn, delay) {
  * @param {Function} error - The callback of error
  */
 export function preloadImg(src, success, error) {
+  
   const img = new Image();
 
   img.onload = function () {
@@ -40,7 +41,16 @@ export function preloadImg(src, success, error) {
 
   img.src = src;
 }
+export function preloadIframe(src, success, error) {
+  
+  const img = new Image();
+  img.setAttribute('width', '100%');
+  img.setAttribute('height', '100%');
+  // img.height = '100%';
+  success(img);
 
+  img.src = src;
+}
 /**
  * Request fullscreen
  * @param {type} element

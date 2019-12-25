@@ -24,18 +24,18 @@ export default [
     input: 'src/js/core.js',
     output: [
       {
-        name: 'photoviewer',
+        name: 'Imagepdfviewer',
         banner,
-        file: 'dist/photoviewer.js',
+        file: 'dist/imagepdfviewer.js',
         format: 'umd'
       },
       {
-        file: 'dist/photoviewer.common.js',
+        file: 'dist/imagepdfviewer.common.js',
         banner,
         format: 'cjs'
       },
       {
-        file: 'dist/photoviewer.esm.js',
+        file: 'dist/imagepdfviewer.esm.js',
         banner,
         format: 'es'
       }

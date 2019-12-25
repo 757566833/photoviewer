@@ -12,13 +12,13 @@ $backdrop-list: backdrop, -ms-backdrop;
     width: 100% !important;
     height: 100% !important;
 
-    .photoviewer-header,
-    .photoviewer-footer,
-    .photoviewer-resizable-handle {
+    .imagepdfviewer-header,
+    .imagepdfviewer-footer,
+    .imagepdfviewer-resizable-handle {
       display: none;
     }
 
-    .photoviewer-stage {
+    .imagepdfviewer-stage {
       top: 0;
       right: 0;
       bottom: 0;

@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|                                                            
  *
- * imagepdfviewer - v0.1.2
+ * imagepdfviewer - v0.1.6
  * A JS plugin to view images/pdf just like in Windows
  * https://github.com/757566833/photoviewer
  *
@@ -16,7 +16,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global.photoviewer = factory());
+    (global.Imagepdfviewer = factory());
 }(this, (function () { 'use strict';
 
     // Class D
@@ -24,7 +24,7 @@
         return new D.fn.init(selector, context);
     };
 
-    var document = window.document,
+    var document$1 = window.document,
       emptyArray = [],
       concat = emptyArray.concat,
       filter = emptyArray.filter,
@@ -46,25 +46,25 @@
       // special attributes that should be get/set via method calls
       methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
 
-      table = document.createElement('table'),
-      tableRow = document.createElement('tr'),
+      table = document$1.createElement('table'),
+      tableRow = document$1.createElement('tr'),
       containers = {
-        'tr': document.createElement('tbody'),
+        'tr': document$1.createElement('tbody'),
         'tbody': table,
         'thead': table,
         'tfoot': table,
         'td': tableRow,
         'th': tableRow,
-        '*': document.createElement('div')
+        '*': document$1.createElement('div')
       },
       simpleSelectorRE = /^[\w-]*$/,
       class2type = {},
       toString = class2type.toString,
-      tempParent = document.createElement('div'),
+      tempParent = document$1.createElement('div'),
       isArray = Array.isArray || function (arg) {
         return Object.prototype.toString.call(arg) === '[object Array]';
       },
-      contains = document.documentElement.contains
+      contains = document$1.documentElement.contains
         ? function (parent, node) {
           return parent !== node && parent.contains(node)
         }
@@ -201,12 +201,12 @@
                 }
                 // If it's a CSS selector, use it to select nodes.
                 else {
-                    dom = D.qsa(document, selector);
+                    dom = D.qsa(document$1, selector);
                 }
             }
             // If a function is given, call it when the DOM is ready
             else if (isFunction(selector)) {
-                return D(document).ready(selector)
+                return D(document$1).ready(selector)
             }
             // If a D collection is given, just return it
             else if (isD(selector)) {
@@ -227,7 +227,7 @@
             }
             // And last but no least, if it's a CSS selector, use it to select nodes.
             else {
-                dom = D.qsa(document, selector);
+                dom = D.qsa(document$1, selector);
             }
             // create a new D collection from the nodes found
             return D.makeArray(dom, selector, this);
@@ -380,7 +380,7 @@
             var dom, nodes, container;
 
             // A special case optimization for a single tag
-            if (singleTagRE.test(html)) dom = D(document.createElement(RegExp.$1));
+            if (singleTagRE.test(html)) dom = D(document$1.createElement(RegExp.$1));
 
             if (!dom) {
                 if (html.replace) html = html.replace(tagExpanderRE, '<$1></$2>');
@@ -545,7 +545,7 @@
             $this.css(props);
         })
         if (!this.length) return null
-        if (document.documentElement !== this[0] && !contains(document.documentElement, this[0]))
+        if (document$1.documentElement !== this[0] && !contains(document$1.documentElement, this[0]))
             return { top: 0, left: 0 }
         var obj = this[0].getBoundingClientRect();
         return {
@@ -611,7 +611,7 @@
 
     function offsetParent() {
         return this.map(function () {
-            var parent = this.offsetParent || document.body;
+            var parent = this.offsetParent || document$1.body;
             while (parent && !rootNodeRE.test(parent.nodeName) && D(parent).css('position') == 'static')
                 parent = parent.offsetParent;
             return parent
@@ -735,7 +735,7 @@
 
         return elem.each(function (_, target) {
             parent = inside ? target : target.parentNode;
-            var parentInDocument = contains(document.documentElement, parent);
+            var parentInDocument = contains(document$1.documentElement, parent);
 
             nodes.forEach(function (node) {
                 if (copyByClone) node = node.cloneNode(true);
@@ -864,7 +864,7 @@
     function add$1(element, events, fn, data, selector, delegator, capture) {
       var id = zid(element), set = (handlers[id] || (handlers[id] = []));
       events.split(/\s/).forEach(function (event) {
-        if (event == 'ready') return D(document).ready(fn)
+        if (event == 'ready') return D(document$1).ready(fn)
         var handler = parse(event);
         handler.fn = fn;
         handler.sel = selector;
@@ -966,7 +966,7 @@
     var prefix = '',
       eventPrefix,
       vendors = { Webkit: 'webkit', Moz: '', O: 'o' },
-      testEl = document.createElement('div'),
+      testEl = document$1.createElement('div'),
       testTransitionProperty = testEl.style.transitionProperty;
     if (testEl.style.transform === undefined) D.each(vendors, function (vendor, event) {
       if (testEl.style[vendor + 'TransitionProperty'] !== undefined) {
@@ -1265,7 +1265,7 @@
       appendTo: 'body'
     };
 
-    var document$1 = window.document;
+    var document$2 = window.document;
     /**
      * Throttle function
      * @param {Function} fn - The function will be triggered
@@ -1304,6 +1304,14 @@
 
       img.src = src;
     }
+    function preloadIframe(src, success, error) {
+      var img = new Image();
+      img.setAttribute('width', '100%');
+      img.setAttribute('height', '100%'); // img.height = '100%';
+
+      success(img);
+      img.src = src;
+    }
     /**
      * Request fullscreen
      * @param {type} element
@@ -1337,7 +1345,7 @@
      */
 
     function hasScrollbar() {
-      return document$1.body.scrollHeight > (window.innerHeight || document$1.documentElement.clientHeight);
+      return document$2.body.scrollHeight > (window.innerHeight || document$2.documentElement.clientHeight);
     }
     /**
      * Get the scrollbar width
@@ -1345,11 +1353,11 @@
      */
 
     function getScrollbarWidth() {
-      var scrollDiv = document$1.createElement('div');
+      var scrollDiv = document$2.createElement('div');
       scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
-      document$1.body.appendChild(scrollDiv);
+      document$2.body.appendChild(scrollDiv);
       var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-      document$1.body.removeChild(scrollDiv);
+      document$2.body.removeChild(scrollDiv);
       return scrollbarWidth;
     }
     /**
@@ -1378,11 +1386,11 @@
      */
 
     function supportTouch() {
-      return !!('ontouchstart' in window || window.DocumentTouch && document$1 instanceof window.DocumentTouch);
+      return !!('ontouchstart' in window || window.DocumentTouch && document$2 instanceof window.DocumentTouch);
     }
 
     var $W = $$1(window);
-    var $D = $$1(document$1);
+    var $D = $$1(document$2);
     var CLICK_EVENT = 'click';
     var RESIZE_EVENT = 'resize';
     var KEYDOWN_EVENT = 'keydown';
@@ -1390,7 +1398,7 @@
     var TOUCH_START_EVENT = supportTouch() ? 'touchstart' : 'mousedown';
     var TOUCH_MOVE_EVENT = supportTouch() ? 'touchmove' : 'mousemove';
     var TOUCH_END_EVENT = supportTouch() ? 'touchend' : 'mouseup';
-    var NS = 'photoviewer';
+    var NS = 'imagepdfviewer';
     var CLASS_NS = '.' + NS;
     var EVENT_NS = '.' + NS;
     var PUBLIC_VARS = {
@@ -1822,7 +1830,7 @@
     };
 
     /**
-     * PhotoViewer class
+     * ImagepdfViewer class
      */
 
     var Imagepdfviewer =
@@ -1869,7 +1877,7 @@
 
       _proto.init = function init(items, opts) {
         this.groupData = items;
-        this.groupIndex = opts['index']; // Fix https://github.com/nzbin/photoviewer/issues/7
+        this.groupIndex = opts['index']; // Fix https://github.com/nzbin/imagepdfviewer/issues/7
 
         PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex']; // Get image src
 
@@ -1878,7 +1886,7 @@
         this.loadImg(imgSrc); // Draggable & Movable & Resizable
 
         if (opts.draggable) {
-          this.draggable(this.$photoviewer, this.dragHandle, CLASS_NS + '-button');
+          this.draggable(this.$imagepdfviewer, this.dragHandle, CLASS_NS + '-button');
         }
 
         if (opts.movable) {
@@ -1886,7 +1894,7 @@
         }
 
         if (opts.resizable) {
-          this.resizable(this.$photoviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
+          this.resizable(this.$imagepdfviewer, this.$stage, this.$image, opts.modalWidth, opts.modalHeight);
         }
       };
 
@@ -1915,10 +1923,10 @@
           actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
           rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
           rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
-        }; // PhotoViewer base HTML
+        }; // ImagepdfViewer base HTML
 
-        var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._createBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
-        return photoviewerHTML;
+        var imagepdfviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <img class=\"" + NS + "-image\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._createBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
+        return imagepdfviewerHTML;
       };
 
       _proto.pdfRender = function pdfRender() {
@@ -1934,54 +1942,54 @@
           actualSize: "<button class=\"" + NS + "-button " + NS + "-button-actual-size\" title=\"" + this.options.i18n.actualSize + "\">\n                      " + this.options.icons.actualSize + "\n                    </button>",
           rotateLeft: "<button class=\"" + NS + "-button " + NS + "-button-rotate-left\" title=\"" + this.options.i18n.rotateLeft + "\">\n                      " + this.options.icons.rotateLeft + "\n                    </button>",
           rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
-        }; // PhotoViewer base HTML
+        }; // ImagepdfViewer base HTML
 
-        var photoviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <iframe class=\"" + NS + "-image " + NS + "-iframe\" src=\"\" alt=\"\" />\n          </div>\n          \n        </div>\n      </div>";
-        return photoviewerHTML;
+        var imagepdfviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <iframe class=\"" + NS + "-image " + NS + "-iframe\" src=\"\" alt=\"\" />\n          </div>\n          \n        </div>\n      </div>";
+        return imagepdfviewerHTML;
       };
 
       _proto.build = function build(imgsrc) {
-        // Create PhotoViewer HTML string
-        var photoviewerHTML;
+        // Create ImagepdfViewer HTML string
+        var imagepdfviewerHTML;
 
         if (imgsrc.toLowerCase().includes('.pdf')) {
-          photoviewerHTML = this.pdfRender();
+          imagepdfviewerHTML = this.pdfRender();
         } else {
-          photoviewerHTML = this.render();
-        } // Make PhotoViewer HTML string to jQuery element
+          imagepdfviewerHTML = this.render();
+        } // Make ImagepdfViewer HTML string to jQuery element
 
 
-        var $photoviewer = $$1(photoviewerHTML); // Get all PhotoViewer element
+        var $imagepdfviewer = $$1(imagepdfviewerHTML); // Get all ImagepdfViewer element
 
-        this.$photoviewer = $photoviewer;
-        this.$header = $photoviewer.find(CLASS_NS + '-header');
-        this.$headToolbar = $photoviewer.find(CLASS_NS + '-toolbar-head');
-        this.$footer = $photoviewer.find(CLASS_NS + '-footer');
-        this.$footToolbar = $photoviewer.find(CLASS_NS + '-toolbar-foot');
-        this.$stage = $photoviewer.find(CLASS_NS + '-stage');
-        this.$title = $photoviewer.find(CLASS_NS + '-title');
-        this.$image = $photoviewer.find(CLASS_NS + '-image');
-        this.$close = $photoviewer.find(CLASS_NS + '-button-close');
-        this.$maximize = $photoviewer.find(CLASS_NS + '-button-maximize');
-        this.$minimize = $photoviewer.find(CLASS_NS + '-button-minimize');
-        this.$zoomIn = $photoviewer.find(CLASS_NS + '-button-zoom-in');
-        this.$zoomOut = $photoviewer.find(CLASS_NS + '-button-zoom-out');
-        this.$actualSize = $photoviewer.find(CLASS_NS + '-button-actual-size');
-        this.$fullscreen = $photoviewer.find(CLASS_NS + '-button-fullscreen');
-        this.$rotateLeft = $photoviewer.find(CLASS_NS + '-button-rotate-left');
-        this.$rotateRight = $photoviewer.find(CLASS_NS + '-button-rotate-right');
-        this.$prev = $photoviewer.find(CLASS_NS + '-button-prev');
-        this.$next = $photoviewer.find(CLASS_NS + '-button-next'); // Add class before image loaded
+        this.$imagepdfviewer = $imagepdfviewer;
+        this.$header = $imagepdfviewer.find(CLASS_NS + '-header');
+        this.$headToolbar = $imagepdfviewer.find(CLASS_NS + '-toolbar-head');
+        this.$footer = $imagepdfviewer.find(CLASS_NS + '-footer');
+        this.$footToolbar = $imagepdfviewer.find(CLASS_NS + '-toolbar-foot');
+        this.$stage = $imagepdfviewer.find(CLASS_NS + '-stage');
+        this.$title = $imagepdfviewer.find(CLASS_NS + '-title');
+        this.$image = $imagepdfviewer.find(CLASS_NS + '-image');
+        this.$close = $imagepdfviewer.find(CLASS_NS + '-button-close');
+        this.$maximize = $imagepdfviewer.find(CLASS_NS + '-button-maximize');
+        this.$minimize = $imagepdfviewer.find(CLASS_NS + '-button-minimize');
+        this.$zoomIn = $imagepdfviewer.find(CLASS_NS + '-button-zoom-in');
+        this.$zoomOut = $imagepdfviewer.find(CLASS_NS + '-button-zoom-out');
+        this.$actualSize = $imagepdfviewer.find(CLASS_NS + '-button-actual-size');
+        this.$fullscreen = $imagepdfviewer.find(CLASS_NS + '-button-fullscreen');
+        this.$rotateLeft = $imagepdfviewer.find(CLASS_NS + '-button-rotate-left');
+        this.$rotateRight = $imagepdfviewer.find(CLASS_NS + '-button-rotate-right');
+        this.$prev = $imagepdfviewer.find(CLASS_NS + '-button-prev');
+        this.$next = $imagepdfviewer.find(CLASS_NS + '-button-next'); // Add class before image loaded
 
         this.$stage.addClass('stage-ready');
         this.$image.addClass('image-ready'); // Reset modal z-index with multiple instances
 
-        this.$photoviewer.css('z-index', PUBLIC_VARS['zIndex']); // Set handle element of draggable
+        this.$imagepdfviewer.css('z-index', PUBLIC_VARS['zIndex']); // Set handle element of draggable
 
         if (!this.options.dragHandle || this.options.dragHandle === CLASS_NS + '-modal') {
-          this.dragHandle = this.$photoviewer;
+          this.dragHandle = this.$imagepdfviewer;
         } else {
-          this.dragHandle = this.$photoviewer.find(this.options.dragHandle);
+          this.dragHandle = this.$imagepdfviewer.find(this.options.dragHandle);
         }
       };
 
@@ -2009,12 +2017,12 @@
 
         this.build(imgsrc);
 
-        this._triggerHook('beforeOpen', this.$el); // Add PhotoViewer to DOM
+        this._triggerHook('beforeOpen', this.$el); // Add ImagepdfViewer to DOM
 
 
-        $$1(this.options.appendTo).eq(0).append(this.$photoviewer);
+        $$1(this.options.appendTo).eq(0).append(this.$imagepdfviewer);
         this.addEvents();
-        this.setModalPos(this.$photoviewer);
+        this.setModalPos(this.$imagepdfviewer);
 
         this._triggerHook('opened', this.$el);
       };
@@ -2023,7 +2031,7 @@
         this._triggerHook('beforeClose', this.$el); // Remove instance
 
 
-        this.$photoviewer.remove();
+        this.$imagepdfviewer.remove();
         this.isOpened = false;
         this.isMaximized = false;
         this.isRotated = false;
@@ -2108,19 +2116,21 @@
         var minHeight = Math.max(modalHeight * scale, this.options.modalHeight);
         minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.round(minWidth);
         minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.round(minHeight);
+        var modelLendth = document.getElementsByClassName('imagepdfviewer-modal').length;
+        modelLendth = modelLendth == 0 ? 0 : modelLendth - 1;
         var modalCSSObj = {
           width: minWidth + 'px',
           height: minHeight + 'px',
-          left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
-          top: (winHeight - minHeight) / 2 + scrollTop + 'px'
+          left: (winWidth - minWidth) / 2 + scrollLeft + modelLendth * 20 + 'px',
+          top: (winHeight - minHeight) / 2 + scrollTop + modelLendth * 20 + 'px'
         }; // Add modal init animation
 
         if (this.options.initAnimation) {
-          this.$photoviewer.animate(modalCSSObj, 400, 'ease-in-out', function () {
+          this.$imagepdfviewer.animate(modalCSSObj, 400, 'ease-in-out', function () {
             _this.setImageSize(img);
           });
         } else {
-          this.$photoviewer.css(modalCSSObj);
+          this.$imagepdfviewer.css(modalCSSObj);
           this.setImageSize(img);
         }
 
@@ -2145,12 +2155,23 @@
           h: this.$stage.height()
         };
         var scale = this.getImageScaleToStage(stageData.w, stageData.h);
-        this.$image.css({
-          width: Math.ceil(img.width * scale) + 'px',
-          height: Math.ceil(img.height * scale) + 'px',
-          left: (stageData.w - Math.ceil(img.width * scale)) / 2 + 'px',
-          top: (stageData.h - Math.ceil(img.height * scale)) / 2 + 'px'
-        }); // Store image initial data
+
+        if (img.src.toLowerCase().includes('pdf')) {
+          this.$image.css({
+            width: '100%',
+            height: '100%',
+            left: '0px',
+            top: '0px'
+          });
+        } else {
+          this.$image.css({
+            width: Math.ceil(img.width * scale) + 'px',
+            height: Math.ceil(img.height * scale) + 'px',
+            left: (stageData.w - Math.ceil(img.width * scale)) / 2 + 'px',
+            top: (stageData.h - Math.ceil(img.height * scale)) / 2 + 'px'
+          });
+        } // Store image initial data
+
 
         $$1.extend(this.imageData, {
           initWidth: img.width * scale,
@@ -2173,7 +2194,7 @@
 
         if (!this.imgLoaded) {
           // Loader end
-          this.$photoviewer.find(CLASS_NS + '-loader').remove(); // Remove class after image loaded
+          this.$imagepdfviewer.find(CLASS_NS + '-loader').remove(); // Remove class after image loaded
 
           this.$stage.removeClass('stage-ready');
           this.$image.removeClass('image-ready'); // Add image init animation
@@ -2195,7 +2216,7 @@
         this.rotateAngle = 0;
         this.imgLoaded = false; // Loader start
 
-        this.$photoviewer.append("<div class=\"" + NS + "-loader\"></div>"); // Add class before image loaded
+        this.$imagepdfviewer.append("<div class=\"" + NS + "-loader\"></div>"); // Add class before image loaded
 
         this.$stage.addClass('stage-ready');
         this.$image.addClass('image-ready');
@@ -2205,34 +2226,95 @@
         }
 
         this.$image.attr('src', imgSrc);
-        preloadImg(imgSrc, function (img) {
-          // Store HTMLImageElement
-          _this2.img = img; // Store original data
 
-          _this2.imageData = {
-            originalWidth: img.width,
-            originalHeight: img.height
-          };
+        if (imgSrc.toLowerCase().includes('.pdf')) {
+          preloadIframe(imgSrc, function (img) {
+            // Store HTMLImageElement
+            _this2.img = img; // Store original data
 
-          if (_this2.isMaximized || _this2.isOpened && _this2.options.fixedModalPos) {
-            _this2.setImageSize(img);
-          } else {
-            _this2.setModalSize(img);
-          } // Callback of image loaded successfully
+            _this2.imageData = {
+              originalWidth: img.width,
+              originalHeight: img.height
+            };
 
-
-          if (fn) {
-            fn.call();
-          }
-        }, function () {
-          // Loader end
-          _this2.$photoviewer.find(CLASS_NS + '-loader').remove(); // Callback of image loading failed
+            if (_this2.isMaximized || _this2.isOpened && _this2.options.fixedModalPos) {
+              _this2.setImageSize(img);
+            } else {
+              _this2.setModalSize(img);
+            } // Callback of image loaded successfully
 
 
-          if (err) {
-            err.call();
-          }
-        });
+            if (fn) {
+              fn.call();
+            }
+          }, function () {
+            // Loader end
+            _this2.$imagepdfviewer.find(CLASS_NS + '-loader').remove(); // Callback of image loading failed
+
+
+            if (err) {
+              err.call();
+            }
+          });
+        } else {
+          preloadImg(imgSrc, function (img) {
+            // Store HTMLImageElement
+            _this2.img = img; // Store original data
+
+            _this2.imageData = {
+              originalWidth: img.width,
+              originalHeight: img.height
+            };
+
+            if (_this2.isMaximized || _this2.isOpened && _this2.options.fixedModalPos) {
+              _this2.setImageSize(img);
+            } else {
+              _this2.setModalSize(img);
+            } // Callback of image loaded successfully
+
+
+            if (fn) {
+              fn.call();
+            }
+          }, function () {
+            // Loader end
+            _this2.$imagepdfviewer.find(CLASS_NS + '-loader').remove(); // Callback of image loading failed
+
+
+            if (err) {
+              err.call();
+            }
+          });
+        } // preloadImg(
+        //   imgSrc,
+        //   img => {
+        //     // Store HTMLImageElement
+        //     this.img = img;
+        //     // Store original data
+        //     this.imageData = {
+        //       originalWidth: img.width,
+        //       originalHeight: img.height
+        //     };
+        //     if (this.isMaximized || (this.isOpened && this.options.fixedModalPos)) {
+        //       this.setImageSize(img);
+        //     } else {
+        //       this.setModalSize(img);
+        //     }
+        //     // Callback of image loaded successfully
+        //     if (fn) {
+        //       fn.call();
+        //     }
+        //   },
+        //   () => {
+        //     // Loader end
+        //     this.$imagepdfviewer.find(CLASS_NS + '-loader').remove();
+        //     // Callback of image loading failed
+        //     if (err) {
+        //       err.call();
+        //     }
+        //   }
+        // );
+
 
         if (this.options.title) {
           this.setImgTitle(imgSrc);
@@ -2429,13 +2511,13 @@
         if (!this.isMaximized) {
           // Store modal data before maximize
           this.modalData = {
-            width: this.$photoviewer.width(),
-            height: this.$photoviewer.height(),
-            left: this.$photoviewer.offset().left,
-            top: this.$photoviewer.offset().top
+            width: this.$imagepdfviewer.width(),
+            height: this.$imagepdfviewer.height(),
+            left: this.$imagepdfviewer.offset().left,
+            top: this.$imagepdfviewer.offset().top
           };
-          this.$photoviewer.addClass(NS + '-maximize');
-          this.$photoviewer.css({
+          this.$imagepdfviewer.addClass(NS + '-maximize');
+          this.$imagepdfviewer.css({
             width: '100%',
             height: '100%',
             left: 0,
@@ -2443,10 +2525,10 @@
           });
           this.isMaximized = true;
         } else {
-          this.$photoviewer.removeClass(NS + '-maximize');
+          this.$imagepdfviewer.removeClass(NS + '-maximize');
           var initModalLeft = ($W.width() - this.options.modalWidth) / 2 + $D.scrollLeft();
           var initModalTop = ($W.height() - this.options.modalHeight) / 2 + $D.scrollTop();
-          this.$photoviewer.css({
+          this.$imagepdfviewer.css({
             width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
             height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
             left: this.modalData.left ? this.modalData.left : initModalLeft,
@@ -2462,7 +2544,7 @@
       };
 
       _proto.fullscreen = function fullscreen() {
-        requestFullscreen(this.$photoviewer[0]);
+        requestFullscreen(this.$imagepdfviewer[0]);
       };
 
       _proto.keydown = function keydown(e) {
@@ -2613,16 +2695,16 @@
       return Imagepdfviewer;
     }();
     /**
-     * Add methods to PhotoViewer
+     * Add methods to ImagepdfViewer
      */
 
 
     $$1.extend(Imagepdfviewer.prototype, draggable, movable, resizable);
     /**
-     * Add PhotoViewer to globle
+     * Add ImagepdfViewer to globle
      */
 
-    window.PhotoViewer = Imagepdfviewer;
+    window.ImagepdfViewer = Imagepdfviewer;
 
     return Imagepdfviewer;
 

@@ -1,11 +1,11 @@
 {
   "name": "imagepdfviewer",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "description": "A JS plugin to view images/pdf just like in Windows",
-  "main": "dist/photoviewer.common.js",
-  "module": "dist/photoviewer.esm.js",
-  "browser": "dist/photoviewer.js",
-  "style": "dist/photoviewer.css",
+  "main": "dist/imagepdfviewer.common.js",
+  "module": "dist/imagepdfviewer.esm.js",
+  "browser": "dist/imagepdfviewer.js",
+  "style": "dist/style/index.css",
   "types": "types/index.d.ts",
   "files": [
     "dist",
@@ -38,8 +38,8 @@
     "url": "https://github.com/nzbin/photoviewer/issues"
   },
   "scripts": {
-    "sass": "node-sass --output-style expanded src/sass/photoviewer.scss dist/photoviewer.css",
-    "sassmin": "node-sass --output-style compressed src/sass/photoviewer.scss dist/photoviewer.min.css",
+    "sass": "node-sass --output-style expanded src/sass/photoviewer.scss dist/style/index.css",
+    "sassmin": "node-sass --output-style compressed src/sass/photoviewer.scss dist/imagepdfviewer.min.css",
     "postcss": "postcss -r dist/*.css",
     "build": "run-s build:css build:js",
     "build:css": "run-s sass",

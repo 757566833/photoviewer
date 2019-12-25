@@ -1,5 +1,7 @@
-# PhotoViewer
 
+# fork from  PhotoViewer
+
+# ImagepdfViewer
 [![Travis](https://img.shields.io/travis/nzbin/photoviewer.svg)](https://travis-ci.org/nzbin/photoviewer)
 [![npm](https://img.shields.io/npm/v/photoviewer.svg)](https://www.npmjs.com/package/photoviewer)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/nzbin/photoviewer/blob/master/LICENSE)
@@ -30,30 +32,101 @@ PhotoViewer is a JS plugin to view images just like in windows.
 You can install the plugin via npm
 
 ```sh
-$ npm install photoviewer --save
+$ npm install imagepdfviewer --save
 ```
+## Differences between photoviewer
 
+ support pdf   
+
+```
+ // source
+ // add  a new render to pdf
+...
+ build(imgsrc) {
+    // Create ImagepdfViewer HTML string
+    let imagepdfviewerHTML;
+    if(imgsrc.toLowerCase().includes('.pdf')){
+       imagepdfviewerHTML = this.pdfRender();
+    }else{
+       imagepdfviewerHTML = this.render();
+    }
+ }
+ ...
+ pdfRender() {
+    const btnsTpl = {
+      minimize: `<button class="${NS}-button ${NS}-button-minimize" title="${this.options.i18n.minimize}">
+                    ${this.options.icons.minimize}
+                  </button>`,
+      maximize: `<button class="${NS}-button ${NS}-button-maximize" title="${this.options.i18n.maximize}">
+                    ${this.options.icons.maximize}
+                  </button>`,
+      close: `<button class="${NS}-button ${NS}-button-close" title="${this.options.i18n.close}">
+                ${this.options.icons.close}
+              </button>`,
+      zoomIn: `<button class="${NS}-button ${NS}-button-zoom-in" title="${this.options.i18n.zoomIn}">
+                  ${this.options.icons.zoomIn}
+                </button>`,
+      zoomOut: `<button class="${NS}-button ${NS}-button-zoom-out" title="${this.options.i18n.zoomOut}">
+                  ${this.options.icons.zoomOut}
+                </button>`,
+      prev: `<button class="${NS}-button ${NS}-button-prev" title="${this.options.i18n.prev}">
+                ${this.options.icons.prev}
+              </button>`,
+      next: `<button class="${NS}-button ${NS}-button-next" title="${this.options.i18n.next}">
+                ${this.options.icons.next}
+              </button>`,
+      fullscreen: `<button class="${NS}-button ${NS}-button-fullscreen" title="${this.options.i18n.fullscreen}">
+                    ${this.options.icons.fullscreen}
+                  </button>`,
+      actualSize: `<button class="${NS}-button ${NS}-button-actual-size" title="${this.options.i18n.actualSize}">
+                      ${this.options.icons.actualSize}
+                    </button>`,
+      rotateLeft: `<button class="${NS}-button ${NS}-button-rotate-left" title="${this.options.i18n.rotateLeft}">
+                      ${this.options.icons.rotateLeft}
+                    </button>`,
+      rotateRight: `<button class="${NS}-button ${NS}-button-rotate-right" title="${this.options.i18n.rotateRight}">
+                      ${this.options.icons.rotateRight}
+                    </button>`
+    };
+
+    // ImagepdfViewer base HTML
+    const imagepdfviewerHTML = `<div class="${NS}-modal">
+        <div class="${NS}-inner">
+          <div class="${NS}-header">
+            <div class="${NS}-toolbar ${NS}-toolbar-head">
+              ${this._createBtns(this.options.headToolbar, btnsTpl)}
+            </div>
+            ${this._createTitle()}
+          </div>
+          <div class="${NS}-stage">
+            <iframe class="${NS}-image ${NS}-iframe" src="" alt="" />
+          </div>
+          
+        </div>
+      </div>`;
+
+    return imagepdfviewerHTML;
+  }
+  ...
+```
 ## Quick Start
 
 ### Step 1: Include files
 
+####   add css/ scss
 ```scss
-@import 'photoviewer/dist/photoviewer.css';
+@import 'imagepdfviewer/dist/style/photoviewer.css';
 ```
 
 ```js
-import PhotoViewer from 'photoviewer';
+import 'imagepdfviewer/dist/style';
 ```
 
-or
-
-```html
-<!-- Core CSS file -->
-<link href="/path/to/photoviewer.css" rel="stylesheet">
-
-<!-- Core JS file -->
-<script src="/path/to/photoviewer.js"></script>
+#### add js
+```js
+import ImagepdfViewer from 'imagepdfviewer';
 ```
+
 
 ### Step 2: Initializing
 
@@ -83,7 +156,7 @@ var options = {
 };
 
 // Initialize the plugin
-var viewer = new PhotoViewer(items, options);
+var viewer = new ImagepdfViewer(items, options);
 ```
 
 ### Step 3: Binding Event

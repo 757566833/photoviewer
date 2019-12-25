@@ -2,7 +2,7 @@
 // General
 //
 
-.photoviewer-modal {
+.imagepdfviewer-modal {
   position: absolute;
   z-index: 1090;
   width: 320px;
@@ -11,7 +11,7 @@
   overflow: visible !important;
 }
 
-.photoviewer-inner {
+.imagepdfviewer-inner {
   position: absolute;
   top: -1px;
   left: -1px;
@@ -26,27 +26,27 @@
   overflow: hidden;
 }
 
-.photoviewer-maximize {
+.imagepdfviewer-maximize {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 
-  .photoviewer-inner {
+  .imagepdfviewer-inner {
     border-radius: 0;
   }
 
-  .photoviewer-resizable-handle {
+  .imagepdfviewer-resizable-handle {
     display: none;
   }
 }
 
-.photoviewer-toolbar {
+.imagepdfviewer-toolbar {
   font-size: 0;
 }
 
-.photoviewer-button {
+.imagepdfviewer-button {
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -76,12 +76,12 @@
   }
 }
 
-.photoviewer-header {
+.imagepdfviewer-header {
   position: relative;
   z-index: 2;
   height: 30px;
 
-  .photoviewer-toolbar {
+  .imagepdfviewer-toolbar {
     float: right;
 
     [dir='rtl'] & {
@@ -89,7 +89,7 @@
     }
   }
 
-  .photoviewer-button {
+  .imagepdfviewer-button {
     height: 30px;
 
     &:hover {
@@ -98,7 +98,7 @@
     }
   }
 
-  .photoviewer-button-close {
+  .imagepdfviewer-button-close {
     &:hover {
       color: #fff;
       background-color: #ff4545;
@@ -106,7 +106,7 @@
   }
 }
 
-.photoviewer-title {
+.imagepdfviewer-title {
   padding: 8px 10px;
   font-size: 14px;
   line-height: 1;
@@ -117,7 +117,7 @@
   overflow: hidden;
 }
 
-.photoviewer-stage {
+.imagepdfviewer-stage {
   position: absolute;
   top: 30px;
   right: 0;
@@ -143,7 +143,7 @@
   }
 }
 
-.photoviewer-image {
+.imagepdfviewer-image {
   position: absolute;
   display: inline-block;
 
@@ -154,12 +154,12 @@
     vertical-align: middle;
   }
 }
-.photoviewer-iframe {
+.imagepdfviewer-iframe {
   width:100%;
   height: 100%;
 }
 
-.photoviewer-footer {
+.imagepdfviewer-footer {
   position: absolute;
   bottom: 0;
   z-index: 2;
@@ -168,7 +168,7 @@
   color: #fff;
   text-align: center;
 
-  .photoviewer-toolbar {
+  .imagepdfviewer-toolbar {
     display: inline-block;
   }
 }

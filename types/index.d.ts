@@ -1,4 +1,4 @@
-declare namespace Imagepdfviewer {
+declare namespace ImagepdfViewer {
   type toolbarOption =
     | 'maximize'
     | 'close'
@@ -77,10 +77,10 @@ declare namespace Imagepdfviewer {
   }
 }
 
-declare class Imagepdfviewer {
-  constructor(items: Imagepdfviewer.Img[], options?: Imagepdfviewer.Options);
+declare class ImagepdfViewer {
+  constructor(items: ImagepdfViewer.Img[], options?: ImagepdfViewer.Options);
 }
 
-declare module 'Imagepdfviewer' {
-  export default Imagepdfviewer;
+declare module 'imagepdfviewer' {
+  export default ImagepdfViewer;
 }

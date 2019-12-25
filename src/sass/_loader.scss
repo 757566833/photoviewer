@@ -2,7 +2,7 @@
 // Loader
 //
 
-.photoviewer-loader {
+.imagepdfviewer-loader {
   position: absolute;
   top: 30px;
   left: 0;
@@ -24,7 +24,7 @@
     border-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, .5) rgba(0, 0, 0, .5) rgba(255, 255, 255, .5);
     border-radius: 100%;
     vertical-align: middle;
-    animation: photoviewerLoading 1s infinite linear;
+    animation: imagepdfviewerLoading 1s infinite linear;
   }
 
   &::after {
@@ -37,7 +37,7 @@
   }
 }
 
-@keyframes photoviewerLoading {
+@keyframes imagepdfviewerLoading {
   0% {
     transform: rotateZ(0deg) translate3d(0, 0, 0);
   }
