@@ -231,7 +231,11 @@ class Imagepdfviewer {
           <div class="${NS}-stage">
             <iframe class="${NS}-image ${NS}-iframe" src="" alt="" />
           </div>
-          
+          <div class="${NS}-footer">
+            <div class="${NS}-toolbar ${NS}-toolbar-foot">
+              ${this._createBtns(this.options.footToolbar, btnsTpl)}
+            </div>
+          </div>
         </div>
       </div>`;
 
@@ -731,6 +735,9 @@ class Imagepdfviewer {
   }
 
  zoom (ratio, origin, e)  { 
+   if(this.imageData.src.includes('pdf')){
+     return;
+   }
     // Zoom out ratio & Zoom in ratio
     ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio;
 

@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|                                                            
  *
- * imagepdfviewer - v0.1.7
+ * imagepdfviewer - v0.2.1
  * A JS plugin to view images/pdf just like in Windows
  * https://github.com/757566833/photoviewer
  *
@@ -1975,7 +1975,7 @@
           rotateRight: "<button class=\"" + NS + "-button " + NS + "-button-rotate-right\" title=\"" + this.options.i18n.rotateRight + "\">\n                      " + this.options.icons.rotateRight + "\n                    </button>"
         }; // ImagepdfViewer base HTML
 
-        var imagepdfviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <iframe class=\"" + NS + "-image " + NS + "-iframe\" src=\"\" alt=\"\" />\n          </div>\n          \n        </div>\n      </div>";
+        var imagepdfviewerHTML = "<div class=\"" + NS + "-modal\">\n        <div class=\"" + NS + "-inner\">\n          <div class=\"" + NS + "-header\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-head\">\n              " + this._createBtns(this.options.headToolbar, btnsTpl) + "\n            </div>\n            " + this._createTitle() + "\n          </div>\n          <div class=\"" + NS + "-stage\">\n            <iframe class=\"" + NS + "-image " + NS + "-iframe\" src=\"\" alt=\"\" />\n          </div>\n          <div class=\"" + NS + "-footer\">\n            <div class=\"" + NS + "-toolbar " + NS + "-toolbar-foot\">\n              " + this._createBtns(this.options.footToolbar, btnsTpl) + "\n            </div>\n          </div>\n        </div>\n      </div>";
         return imagepdfviewerHTML;
       };
 
@@ -2409,7 +2409,11 @@
       };
 
       _proto.zoom = function zoom(ratio, origin, e) {
-        // Zoom out ratio & Zoom in ratio
+        if (this.imageData.src.includes('pdf')) {
+          return;
+        } // Zoom out ratio & Zoom in ratio
+
+
         ratio = ratio < 0 ? 1 / (1 - ratio) : 1 + ratio; // Image ratio
 
         ratio = this.$image.width() / this.imageData.originalWidth * ratio; // Fixed digital error

@@ -1,6 +1,6 @@
 {
   "name": "imagepdfviewer",
-  "version": "0.1.8",
+  "version": "0.2.2",
   "description": "A JS plugin to view images/pdf just like in Windows",
   "main": "dist/imagepdfviewer.common.js",
   "module": "dist/imagepdfviewer.esm.js",
