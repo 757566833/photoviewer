@@ -14,6 +14,7 @@ declare namespace ImagepdfViewer {
   export interface Img {
     src: string;
     title?: string;
+    type?: string;
   }
 
   export interface Options {

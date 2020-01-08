@@ -5,7 +5,7 @@
  *  / ____/ __  / /_/ / / / / /_/ /| |/ // // /___  | |/ |/ / /___/ _, _/
  * /_/   /_/ /_/\____/ /_/  \____/ |___/___/_____/  |__/|__/_____/_/ |_|                                                            
  *
- * imagepdfviewer - v0.2.1
+ * imagepdfviewer - v0.2.2
  * A JS plugin to view images/pdf just like in Windows
  * https://github.com/757566833/photoviewer
  *
@@ -1912,9 +1912,10 @@
 
         PUBLIC_VARS['zIndex'] = PUBLIC_VARS['zIndex'] === 0 ? opts['zIndex'] : PUBLIC_VARS['zIndex']; // Get image src
 
+        var item = items[this.groupIndex]['src'];
         var imgSrc = items[this.groupIndex]['src'];
-        this.open(imgSrc);
-        this.loadImg(imgSrc); // Draggable & Movable & Resizable
+        this.open(item);
+        this.loadImg(imgSrc, undefined, undefined, item); // Draggable & Movable & Resizable
 
         if (opts.draggable) {
           this.draggable(this.$imagepdfviewer, this.dragHandle, CLASS_NS + '-button');
@@ -1979,11 +1980,11 @@
         return imagepdfviewerHTML;
       };
 
-      _proto.build = function build(imgsrc) {
+      _proto.build = function build(item) {
         // Create ImagepdfViewer HTML string
         var imagepdfviewerHTML;
 
-        if (imgsrc.toLowerCase().includes('.pdf')) {
+        if (item.src.toLowerCase().includes('.pdf') || item.type && item.type == 'pdf') {
           imagepdfviewerHTML = this.pdfRender();
         } else {
           imagepdfviewerHTML = this.render();
@@ -2024,7 +2025,7 @@
         }
       };
 
-      _proto.open = function open(imgsrc) {
+      _proto.open = function open(item) {
         if (!this.options.multiInstances) {
           $$1(CLASS_NS + '-modal').eq(0).remove();
         } // Fixed modal position bug
@@ -2046,7 +2047,7 @@
           }
         }
 
-        this.build(imgsrc);
+        this.build(item);
 
         this._triggerHook('beforeOpen', this.$el); // Add ImagepdfViewer to DOM
 
@@ -2186,8 +2187,9 @@
           h: this.$stage.height()
         };
         var scale = this.getImageScaleToStage(stageData.w, stageData.h);
+        this.groupIndex = index;
 
-        if (img.src.toLowerCase().includes('pdf')) {
+        if (img.src.toLowerCase().includes('.pdf') || this.groupData[index] && this.groupData[index].type == 'pdf') {
           this.$image.css({
             width: '100%',
             height: '100%',
@@ -2239,7 +2241,7 @@
         }
       };
 
-      _proto.loadImg = function loadImg(imgSrc, fn, err) {
+      _proto.loadImg = function loadImg(imgSrc, fn, err, item) {
         var _this2 = this;
 
         // Reset image
@@ -2257,9 +2259,9 @@
           this.$image.hide();
         }
 
-        this.$image.attr('src', imgSrc);
+        this.$image.attr('src', imgSrc); // item.src.toLowerCase().includes('.pdf') || (item.type && item.type == 'pdf')
 
-        if (imgSrc.toLowerCase().includes('.pdf')) {
+        if (imgSrc.toLowerCase().includes('.pdf') || item.type && item.type == 'pdf') {
           preloadIframe(imgSrc, function (img) {
             // Store HTMLImageElement
             _this2.img = img; // Store original data
@@ -2383,7 +2385,7 @@
           _this3._triggerHook('changed', index);
         }, function () {
           _this3._triggerHook('changed', index);
-        });
+        }, this.groupData[index]);
       };
 
       _proto.wheel = function wheel(e) {
@@ -2409,7 +2411,9 @@
       };
 
       _proto.zoom = function zoom(ratio, origin, e) {
-        if (this.imageData.src.includes('pdf')) {
+        var index = this.groupData[index];
+
+        if (this.imageData.src.includes('.pdf') || this.groupData[index] && this.groupData[index].type == 'pdf') {
           return;
         } // Zoom out ratio & Zoom in ratio
 
